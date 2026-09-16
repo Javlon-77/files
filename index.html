@@ -1,187 +1,262 @@
-html = r'''<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="uz">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MoveMate — Fayl ko‘chirish yordamchisi</title>
+<title>MoveNow — Fayllarni oson ko‘chirish</title>
 <style>
 :root{
-  --bg:#0a0f1d; --panel:#111827; --panel2:#172033; --line:#263247;
-  --text:#eef4ff; --muted:#9aa9c2; --accent:#72a7ff; --accent2:#8ef0d0;
-  --danger:#ff8f9b; --shadow:0 20px 60px rgba(0,0,0,.35);
+ --bg:#070b14;--card:#101827;--card2:#162235;--line:#263550;
+ --text:#f4f7ff;--muted:#95a5bf;--blue:#6ea8ff;--green:#69e0ba;--red:#ff7586
 }
 *{box-sizing:border-box}
-body{
-  margin:0; min-height:100vh; font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-  color:var(--text); background:
-  radial-gradient(circle at 20% -10%, rgba(114,167,255,.20), transparent 30%),
-  radial-gradient(circle at 100% 20%, rgba(142,240,208,.10), transparent 25%), var(--bg);
+body{margin:0;background:
+ radial-gradient(circle at 15% 0%,#17305a 0,transparent 32%),
+ radial-gradient(circle at 100% 35%,#12392f 0,transparent 28%),var(--bg);
+ color:var(--text);font-family:Inter,Segoe UI,Arial,sans-serif;min-height:100vh}
+.wrap{max-width:1050px;margin:auto;padding:24px}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}
+.logo{display:flex;gap:12px;align-items:center}
+.logoIcon{width:45px;height:45px;border-radius:14px;background:linear-gradient(135deg,var(--blue),var(--green));
+ color:#06101d;display:grid;place-items:center;font-size:22px;font-weight:900}
+h1{font-size:21px;margin:0}.muted{color:var(--muted);font-size:13px;margin-top:3px}
+.status{font-size:12px;padding:8px 11px;border:1px solid var(--line);border-radius:99px;color:var(--muted)}
+.hero{padding:30px;border:1px solid var(--line);border-radius:24px;background:rgba(16,24,39,.84)}
+.hero h2{font-size:37px;line-height:1.08;margin:0 0 10px;max-width:720px}
+.hero p{margin:0;color:var(--muted);line-height:1.55;max-width:760px}
+.flow{display:grid;grid-template-columns:1fr 70px 1fr;gap:15px;align-items:center;margin-top:20px}
+.place{border:1px solid var(--line);background:var(--card);border-radius:20px;padding:20px}
+.place.selected{border-color:#5183c9;box-shadow:0 0 0 1px rgba(110,168,255,.12)}
+.step{font-size:12px;color:var(--blue);font-weight:800;letter-spacing:.03em;margin-bottom:7px}
+.place h3{margin:0 0 7px;font-size:21px}
+.path{min-height:42px;color:var(--muted);font-size:13px;line-height:1.4;word-break:break-word}
+.pick{width:100%;padding:13px 15px;border:0;border-radius:12px;background:var(--card2);color:var(--text);font-weight:800;cursor:pointer;border:1px solid var(--line)}
+.pick:hover{border-color:#5a7cac;background:#1b2a41}
+.arrow{width:50px;height:50px;border-radius:50%;display:grid;place-items:center;margin:auto;
+ background:#15243a;border:1px solid var(--line);font-size:23px;color:var(--green)}
+.action{margin-top:17px;display:flex;gap:10px;flex-wrap:wrap}
+.mainBtn{flex:1;min-width:240px;padding:16px;border:0;border-radius:14px;font-size:16px;font-weight:900;cursor:pointer;
+ background:linear-gradient(135deg,var(--blue),#7795ff);color:#07111e}
+.mainBtn:disabled{opacity:.45;cursor:not-allowed}
+.reset{padding:16px 18px;border-radius:14px;background:var(--card2);border:1px solid var(--line);color:var(--text);font-weight:800;cursor:pointer}
+.panel{margin-top:18px;border:1px solid var(--line);border-radius:20px;background:rgba(16,24,39,.82);padding:20px}
+.panel h3{margin:0 0 14px}
+.progressBox{display:none}
+.bar{height:10px;border-radius:99px;background:#0b1220;overflow:hidden;border:1px solid var(--line)}
+.bar>div{height:100%;width:0;background:linear-gradient(90deg,var(--blue),var(--green));transition:.2s}
+.progressInfo{display:flex;justify-content:space-between;color:var(--muted);font-size:12px;margin:9px 0 8px}
+.log{margin-top:12px;max-height:180px;overflow:auto;background:#0a111e;border:1px solid var(--line);border-radius:13px;padding:12px;font:12px Consolas,monospace;color:#cbd8ec}
+.log div{padding:3px 0}
+.good{color:var(--green)}.bad{color:var(--red)}
+.info{color:#b7c5da;line-height:1.55;font-size:12px}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.mini{padding:15px;border-radius:15px;background:var(--card2);border:1px solid var(--line)}
+.mini b{display:block;margin-bottom:5px}.mini span{color:var(--muted);font-size:12px;line-height:1.45}
+footer{text-align:center;color:#64748b;font-size:11px;padding:20px}
+@media(max-width:760px){
+ .flow{grid-template-columns:1fr}.arrow{transform:rotate(90deg)}
+ .hero h2{font-size:29px}.wrap{padding:14px}.cards{grid-template-columns:1fr}
 }
-button,input,select{font:inherit}
-.container{max-width:1200px;margin:auto;padding:24px}
-header{
-  display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:26px
-}
-.brand{display:flex;align-items:center;gap:12px}
-.logo{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;
-  background:linear-gradient(135deg,var(--accent),var(--accent2));color:#07111f;font-weight:900;box-shadow:0 12px 35px rgba(114,167,255,.25)}
-h1{font-size:21px;margin:0}.sub{color:var(--muted);font-size:13px;margin-top:2px}
-.badge{padding:8px 11px;border:1px solid var(--line);background:rgba(17,24,39,.7);border-radius:999px;color:var(--muted);font-size:12px}
-.hero{padding:28px;border:1px solid var(--line);border-radius:24px;background:linear-gradient(145deg,rgba(17,24,39,.9),rgba(17,24,39,.62));box-shadow:var(--shadow)}
-.hero h2{font-size:34px;line-height:1.1;margin:0 0 10px}
-.hero p{margin:0;color:var(--muted);max-width:760px}
-.grid{display:grid;grid-template-columns:1.1fr .9fr;gap:18px;margin-top:18px}
-.card{background:rgba(17,24,39,.78);border:1px solid var(--line);border-radius:20px;padding:20px}
-.card h3{margin:0 0 14px;font-size:17px}
-.quick{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-.quick button{
-  text-align:left;padding:13px 14px;border:1px solid var(--line);border-radius:14px;background:var(--panel2);color:var(--text);cursor:pointer;transition:.2s
-}
-.quick button:hover{transform:translateY(-1px);border-color:#456087;background:#1b2940}
-.quick small{display:block;color:var(--muted);margin-top:4px}
-.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-label{font-size:12px;color:var(--muted);display:block;margin:0 0 7px}
-input,select{
-  width:100%;padding:12px 13px;color:var(--text);background:#0d1524;border:1px solid var(--line);border-radius:12px;outline:none
-}
-input:focus,select:focus{border-color:#5179b2}
-.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-.btn{
-  border:0;border-radius:12px;padding:12px 15px;cursor:pointer;font-weight:700
-}
-.primary{background:linear-gradient(135deg,var(--accent),#5c8eff);color:#07111f}
-.secondary{background:#1b2940;color:var(--text);border:1px solid var(--line)}
-.output{margin-top:14px;border:1px solid var(--line);border-radius:16px;background:#0b1220;overflow:hidden}
-.output-head{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-bottom:1px solid var(--line)}
-.output-head b{font-size:13px}.output-head span{font-size:11px;color:var(--muted)}
-pre{margin:0;padding:16px;white-space:pre-wrap;word-break:break-word;color:#d7e5ff;font-size:13px;line-height:1.55}
-.steps{display:grid;gap:10px}
-.step{display:flex;gap:12px;padding:13px;border:1px solid var(--line);border-radius:14px;background:#0e1728}
-.num{min-width:28px;height:28px;border-radius:9px;display:grid;place-items:center;background:#203457;color:#acd0ff;font-weight:800}
-.step strong{font-size:13px}.step div:last-child{color:var(--muted);font-size:12px;line-height:1.45}
-.note{margin-top:15px;padding:12px 13px;border:1px solid #3a4154;background:#12182a;border-radius:13px;color:#bac6d9;font-size:12px;line-height:1.5}
-.notice{margin-top:18px;padding:14px;border:1px solid #3a4154;border-radius:16px;background:rgba(18,24,42,.8);color:#c4cee0;font-size:12px;line-height:1.5}
-.footer{text-align:center;color:#70809b;font-size:11px;padding:25px 0 10px}
-@media(max-width:850px){.grid{grid-template-columns:1fr}.hero h2{font-size:28px}}
-@media(max-width:600px){.formgrid,.quick{grid-template-columns:1fr}.container{padding:14px}.hero{padding:20px}}
 </style>
 </head>
 <body>
-<div class="container">
-<header>
-  <div class="brand">
-    <div class="logo">M</div>
-    <div><h1>MoveMate</h1><div class="sub">Windows uchun fayl ko‘chirish yordamchisi</div></div>
+<div class="wrap">
+ <div class="top">
+  <div class="logo">
+   <div class="logoIcon">↗</div>
+   <div><h1>MoveNow</h1><div class="muted">Fayllarni ikki bosqichda ko‘chirish</div></div>
   </div>
-  <div class="badge">C: ↔ D: · Downloads · Pictures · Desktop</div>
-</header>
+  <div class="status" id="status">Tayyor</div>
+ </div>
 
-<section class="hero">
-  <h2>Faylni qayerdan qayerga ko‘chirasiz?</h2>
-  <p>Manzilni tanlang — sayt sizga eng qulay usulni, tayyor Windows buyruğini va bosqichlarini chiqaradi.</p>
-</section>
+ <section class="hero">
+  <h2>Qayerdan → qayerga?</h2>
+  <p>Ikki papkani tanlang. Keyin <b>Ko‘chirish</b> tugmasini bosing. Brauzer Windows ruxsatini so‘raydi va tanlangan manba ichidagi fayl hamda ichki papkalarni maqsadga ko‘chiradi.</p>
 
-<div class="grid">
-  <section class="card">
-    <h3>1. Tez tanlov</h3>
-    <div class="quick">
-      <button onclick="preset('D:\\','C:\\')">D disk → C disk<small>Katta papka yoki fayl uchun</small></button>
-      <button onclick="preset('C:\\Users\\%USERNAME%\\Downloads','C:\\Users\\%USERNAME%\\Pictures')">Downloads → Pictures<small>Yuklangan rasmlarni tartiblash</small></button>
-      <button onclick="preset('C:\\Users\\%USERNAME%\\Desktop','D:\\')">Desktop → D disk<small>Desktopni bo‘shatish</small></button>
-      <button onclick="preset('C:\\Users\\%USERNAME%\\Downloads','D:\\Downloads')">Downloads → D:\\Downloads<small>C diskdagi joyni tejash</small></button>
-    </div>
-
-    <h3 style="margin-top:22px">2. O‘zingiz yozing</h3>
-    <div class="formgrid">
-      <div><label>Manba</label><input id="src" value="D:\" placeholder="Masalan: D:\Games"></div>
-      <div><label>Maqsad</label><input id="dst" value="C:\Users\%USERNAME%\Desktop" placeholder="Masalan: C:\Backup"></div>
-    </div>
-    <div class="row" style="margin-top:13px">
-      <button class="btn primary" onclick="generate()">Usulni ko‘rsatish</button>
-      <button class="btn secondary" onclick="swapPaths()">↕ Manzilni almashtirish</button>
-    </div>
-  </section>
-
-  <section class="card">
-    <h3>3. Eng qulay usul</h3>
-    <div class="steps" id="steps"></div>
-    <div class="note" id="methodNote"></div>
-  </section>
-</div>
-
-<section class="card" style="margin-top:18px">
-  <h3>Tayyor buyruq</h3>
-  <div class="output">
-    <div class="output-head"><b>CMD / Windows Terminal</b><span>Copy tugmasini bosing</span></div>
-    <pre id="command">robocopy "D:\" "C:\Users\%USERNAME%\Desktop" /E /MOVE</pre>
+  <div class="flow">
+   <div class="place" id="sourceCard">
+    <div class="step">1 — MANBA</div>
+    <h3>Qayerdan?</h3>
+    <div class="path" id="sourcePath">Hali papka tanlanmagan</div>
+    <button class="pick" id="sourceBtn">📁 Manba papkani tanlash</button>
+   </div>
+   <div class="arrow">→</div>
+   <div class="place" id="destCard">
+    <div class="step">2 — MAQSAD</div>
+    <h3>Qayerga?</h3>
+    <div class="path" id="destPath">Hali papka tanlanmagan</div>
+    <button class="pick" id="destBtn">📁 Maqsad papkani tanlash</button>
+   </div>
   </div>
-  <div class="row" style="margin-top:12px">
-    <button class="btn secondary" onclick="copyCmd()">📋 Buyruqni nusxalash</button>
-    <button class="btn secondary" onclick="showExplorer()">📁 Explorer usulini ko‘rsatish</button>
-  </div>
-  <div class="notice" id="explorerTip">
-    Explorer usuli: manba papkasini oching → kerakli fayl/papkani belgilang → <b>Ctrl+X</b> → maqsad papkasiga kiring → <b>Ctrl+V</b>. Bitta yoki bir nechta fayl uchun eng oson usul shu.
-  </div>
-</section>
 
-<section class="card" style="margin-top:18px">
-  <h3>Qaysi holatda qaysi usul?</h3>
-  <div class="quick">
-    <button onclick="setExplanation('Bir nechta fayl/papka','Ctrl+X → Ctrl+V','Windows Explorer’da eng tezkor.')">📦 Bir nechta fayl<small>Explorer tavsiya qilinadi</small></button>
-    <button onclick="setExplanation('Juda katta papka','robocopy','Katta hajmli ko‘chirishda barqaror usul.')">💾 Juda katta papka<small>CMD / robocopy</small></button>
-    <button onclick="setExplanation('Downloads → Pictures','Explorer','Rasmlarni tanlab ko‘chirish qulay.')">🖼️ Rasmlar<small>Explorer qulay</small></button>
-    <button onclick="setExplanation('C: → D:','robocopy yoki Explorer','Fayl hajmi va soniga qarab tanlang.')">🗂️ C va D o‘rtasida<small>Ikkalasi ham ishlaydi</small></button>
+  <div class="action">
+   <button class="mainBtn" id="moveBtn" disabled>🚀 Ruxsat berish va ko‘chirish</button>
+   <button class="reset" id="resetBtn">↺ Tozalash</button>
   </div>
-  <div class="notice" id="explainBox" style="display:none"></div>
-</section>
+ </section>
 
-<div class="footer">MoveMate · Sayt ko‘rsatma va buyruqlarni tayyorlaydi. Fayllarni brauzerning o‘zi avtomatik ko‘chirmaydi.</div>
+ <section class="panel progressBox" id="progressBox">
+   <h3>Ko‘chirish jarayoni</h3>
+   <div class="progressInfo"><span id="progressText">Tayyorlanmoqda...</span><span id="percent">0%</span></div>
+   <div class="bar"><div id="bar"></div></div>
+   <div class="log" id="log"></div>
+ </section>
+
+ <section class="panel">
+  <h3>Qanday ishlaydi?</h3>
+  <div class="cards">
+   <div class="mini"><b>📁 1. Manbani tanlang</b><span>Masalan: Downloads, D diskdagi papka yoki Desktop.</span></div>
+   <div class="mini"><b>📁 2. Maqsadni tanlang</b><span>Masalan: Pictures, C diskdagi papka yoki D:\\Backup.</span></div>
+   <div class="mini"><b>⚡ 3. Birga ko‘chadi</b><span>Ichki papkalar va ko‘p sonli fayllar ham navbat bilan o‘tkaziladi.</span></div>
+  </div>
+ </section>
+
+ <section class="panel">
+   <div class="info"><b>Muhim:</b> bu brauzer xavfsizligi sababli faqat siz tanlagan papkalarga ruxsat bilan ishlaydi. “Ko‘chirish” bosilganda ruxsat oynasi chiqishi mumkin. Bu sayt fayllarni serverga yubormaydi.</div>
+ </section>
+ <footer>MoveNow · Windows fayllarini qulay ko‘chirish uchun lokal brauzer yordamchisi</footer>
 </div>
 
 <script>
-function normalize(p){ return p.trim().replace(/^"|"$/g,''); }
-function escapePath(p){ return '"' + p.replace(/"/g,'\\"') + '"'; }
-function preset(s,d){ document.getElementById('src').value=s; document.getElementById('dst').value=d; generate(); }
-function swapPaths(){ let a=document.getElementById('src'),b=document.getElementById('dst'); [a.value,b.value]=[b.value,a.value]; generate(); }
+let sourceHandle=null, destHandle=null;
 
-function generate(){
-  const src=normalize(document.getElementById('src').value);
-  const dst=normalize(document.getElementById('dst').value);
-  if(!src || !dst){return}
-  const hasFolderHint = !src.split('\\').pop().includes('.');
-  const cmd=`robocopy ${escapePath(src)} ${escapePath(dst)} /E /MOVE`;
-  document.getElementById('command').textContent=cmd;
+const $ = id => document.getElementById(id);
+const supported = 'showDirectoryPicker' in window && 'FileSystemDirectoryHandle' in window;
 
-  let special='';
-  const lowS=src.toLowerCase(), lowD=dst.toLowerCase();
-  if(lowS.includes('downloads') && lowD.includes('pictures')) special='Bu holatda rasmlarni Explorer’da tanlab Ctrl+X → Ctrl+V qilish odatda eng sodda.';
-  else if(src.match(/^D:\\?$/i) && dst.match(/^C:\\?$/i)) special='Butun D: diskni C: ga ko‘chirish xavfli. Kerakli papka yoki faylni alohida tanlang.';
-  else if(src.match(/^C:\\?$/i) && dst.match(/^D:\\?$/i)) special='Butun C: diskni ko‘chirish tavsiya etilmaydi. Faqat kerakli papkalarni ko‘chiring.';
-  else special='Kichik hajm uchun Explorer, katta hajm yoki ko‘p fayl uchun robocopy qulay.';
+function setStatus(text){ $('status').textContent=text; }
+function refreshButton(){
+  $('moveBtn').disabled=!(sourceHandle && destHandle);
+}
 
-  const steps=[
-    ['1','Manba papkani aniqlang',src],
-    ['2','Maqsad papkani aniqlang',dst],
-    ['3','Buyruqni Terminal/CMD’da ishga tushiring','Windows Terminal → buyruqni joylashtiring → Enter'],
-    ['4','Natijani tekshiring','Maqsad papkasida fayllar paydo bo‘lganini tekshiring']
-  ];
-  document.getElementById('steps').innerHTML=steps.map(x=>`<div class="step"><span class="num">${x[0]}</span><div><strong>${x[1]}</strong><br>${x[2]}</div></div>`).join('');
-  document.getElementById('methodNote').textContent=special;
+async function chooseSource(){
+  if(!supported){ alert('Bu brauzer papka ruxsat API sini qo‘llab-quvvatlamaydi. Google Chrome yoki Microsoft Edge ishlating.'); return; }
+  try{
+    sourceHandle=await window.showDirectoryPicker({mode:'readwrite'});
+    $('sourcePath').innerHTML=`<span class="good">✓ ${escapeHtml(sourceHandle.name)}</span>`;
+    $('sourceCard').classList.add('selected');
+    setStatus('Manba tanlandi');
+    refreshButton();
+  }catch(e){
+    if(e.name!=='AbortError') alert('Manba papkasini tanlashda xatolik: '+e.message);
+  }
 }
-function copyCmd(){
-  navigator.clipboard.writeText(document.getElementById('command').textContent).then(()=>{
-    const b=event.currentTarget, old=b.textContent; b.textContent='✅ Nusxalandi'; setTimeout(()=>b.textContent=old,1200);
-  });
+
+async function chooseDest(){
+  if(!supported){ alert('Bu brauzer papka ruxsat API sini qo‘llab-quvvatlamaydi. Google Chrome yoki Microsoft Edge ishlating.'); return; }
+  try{
+    destHandle=await window.showDirectoryPicker({mode:'readwrite'});
+    $('destPath').innerHTML=`<span class="good">✓ ${escapeHtml(destHandle.name)}</span>`;
+    $('destCard').classList.add('selected');
+    setStatus('Manba va maqsad tayyor');
+    refreshButton();
+  }catch(e){
+    if(e.name!=='AbortError') alert('Maqsad papkasini tanlashda xatolik: '+e.message);
+  }
 }
-function showExplorer(){
-  document.getElementById('explorerTip').innerHTML='<b>Explorer:</b> manba papkasini oching → fayl/papkani belgilang → <b>Ctrl+X</b> → maqsad papkasini oching → <b>Ctrl+V</b>. Bir nechta elementni birga ko‘chirishda <b>Shift</b> yoki <b>Ctrl</b> bilan tanlash mumkin.';
+
+function escapeHtml(s){ return s.replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m])); }
+
+async function ensurePermission(handle){
+  const opts={mode:'readwrite'};
+  if(await handle.queryPermission(opts)==='granted') return true;
+  return (await handle.requestPermission(opts))==='granted';
 }
-function setExplanation(title,method,text){
-  const box=document.getElementById('explainBox');
-  box.style.display='block';
-  box.innerHTML=`<b>${title}</b> → ${method}<br><span style="opacity:.85">${text}</span>`;
+
+async function getAllEntries(dir, base=''){
+  const entries=[];
+  for await(const [name,handle] of dir.entries()){
+    entries.push({name,handle,path:base?base+'/'+name:name});
+  }
+  return entries;
 }
-generate();
+
+async function copyDirContents(fromDir,toDir,state,relative=''){
+  for await(const [name,handle] of fromDir.entries()){
+    const rel=relative?relative+'/'+name:name;
+    if(handle.kind==='directory'){
+      const newDir=await toDir.getDirectoryHandle(name,{create:true});
+      state.folders++;
+      await copyDirContents(handle,newDir,state,rel);
+    }else{
+      try{
+        const file=await handle.getFile();
+        const out=await toDir.getFileHandle(name,{create:true});
+        const writable=await out.createWritable();
+        await writable.write(file);
+        await writable.close();
+
+        await handle.remove();
+        state.files++;
+        state.bytes+=file.size;
+        log(`✓ ${rel}`, 'good');
+      }catch(err){
+        state.failed++;
+        log(`✗ ${rel} — ${err.message}`,'bad');
+      }
+      updateProgress(state);
+    }
+  }
+}
+
+function log(text,cls=''){
+  const d=document.createElement('div'); d.className=cls; d.textContent=text;
+  $('log').appendChild(d); $('log').scrollTop=$('log').scrollHeight;
+}
+function updateProgress(state){
+  $('progressText').textContent=`Ko‘chirildi: ${state.files} ta · Xatolik: ${state.failed} ta`;
+  $('percent').textContent='Ishlanmoqda…';
+}
+
+async function moveAll(){
+  if(!sourceHandle || !destHandle) return;
+  if(sourceHandle===destHandle){ alert('Manba va maqsad bir xil papka bo‘lishi mumkin emas.'); return; }
+
+  $('progressBox').style.display='block'; $('log').innerHTML='';
+  $('moveBtn').disabled=true; setStatus('Ruxsat tekshirilmoqda…');
+
+  try{
+    const sOK=await ensurePermission(sourceHandle);
+    if(!sOK){ setStatus('Manba ruxsati berilmadi'); $('moveBtn').disabled=false; return; }
+    const dOK=await ensurePermission(destHandle);
+    if(!dOK){ setStatus('Maqsad ruxsati berilmadi'); $('moveBtn').disabled=false; return; }
+
+    log('Ruxsat berildi. Fayllar ko‘chirilmoqda…');
+    setStatus('Ko‘chirilmoqda…');
+
+    const state={files:0,folders:0,failed:0,bytes:0};
+    await copyDirContents(sourceHandle,destHandle,state);
+
+    $('progressText').textContent=`Tugatildi: ${state.files} ta fayl · ${state.failed} ta xatolik`;
+    $('percent').textContent='100%';
+    $('bar').style.width='100%';
+    setStatus(state.failed?'Ba’zi fayllar ko‘chmadi':'Tayyor ✓');
+    log(`Tugatildi. ${state.files} ta fayl ko‘chirildi, ${state.failed} ta faylda xatolik.`, state.failed?'bad':'good');
+  }catch(err){
+    setStatus('Xatolik');
+    log('Xatolik: '+err.message,'bad');
+  }finally{
+    $('moveBtn').disabled=false;
+  }
+}
+
+$('sourceBtn').onclick=chooseSource;
+$('destBtn').onclick=chooseDest;
+$('moveBtn').onclick=moveAll;
+$('resetBtn').onclick=()=>{
+ sourceHandle=null;destHandle=null;
+ $('sourcePath').textContent='Hali papka tanlanmagan';
+ $('destPath').textContent='Hali papka tanlanmagan';
+ $('sourceCard').classList.remove('selected');
+ $('destCard').classList.remove('selected');
+ $('progressBox').style.display='none';
+ $('bar').style.width='0%';$('log').innerHTML='';
+ setStatus('Tayyor');refreshButton();
+};
+
+if(!supported){
+ setStatus('Chrome / Edge kerak');
+ $('moveBtn').title='Google Chrome yoki Microsoft Edge ishlating';
+}
 </script>
 </body>
 </html>
