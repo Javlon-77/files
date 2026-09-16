@@ -1,0 +1,187 @@
+html = r'''<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MoveMate — Fayl ko‘chirish yordamchisi</title>
+<style>
+:root{
+  --bg:#0a0f1d; --panel:#111827; --panel2:#172033; --line:#263247;
+  --text:#eef4ff; --muted:#9aa9c2; --accent:#72a7ff; --accent2:#8ef0d0;
+  --danger:#ff8f9b; --shadow:0 20px 60px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box}
+body{
+  margin:0; min-height:100vh; font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  color:var(--text); background:
+  radial-gradient(circle at 20% -10%, rgba(114,167,255,.20), transparent 30%),
+  radial-gradient(circle at 100% 20%, rgba(142,240,208,.10), transparent 25%), var(--bg);
+}
+button,input,select{font:inherit}
+.container{max-width:1200px;margin:auto;padding:24px}
+header{
+  display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:26px
+}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));color:#07111f;font-weight:900;box-shadow:0 12px 35px rgba(114,167,255,.25)}
+h1{font-size:21px;margin:0}.sub{color:var(--muted);font-size:13px;margin-top:2px}
+.badge{padding:8px 11px;border:1px solid var(--line);background:rgba(17,24,39,.7);border-radius:999px;color:var(--muted);font-size:12px}
+.hero{padding:28px;border:1px solid var(--line);border-radius:24px;background:linear-gradient(145deg,rgba(17,24,39,.9),rgba(17,24,39,.62));box-shadow:var(--shadow)}
+.hero h2{font-size:34px;line-height:1.1;margin:0 0 10px}
+.hero p{margin:0;color:var(--muted);max-width:760px}
+.grid{display:grid;grid-template-columns:1.1fr .9fr;gap:18px;margin-top:18px}
+.card{background:rgba(17,24,39,.78);border:1px solid var(--line);border-radius:20px;padding:20px}
+.card h3{margin:0 0 14px;font-size:17px}
+.quick{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.quick button{
+  text-align:left;padding:13px 14px;border:1px solid var(--line);border-radius:14px;background:var(--panel2);color:var(--text);cursor:pointer;transition:.2s
+}
+.quick button:hover{transform:translateY(-1px);border-color:#456087;background:#1b2940}
+.quick small{display:block;color:var(--muted);margin-top:4px}
+.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+label{font-size:12px;color:var(--muted);display:block;margin:0 0 7px}
+input,select{
+  width:100%;padding:12px 13px;color:var(--text);background:#0d1524;border:1px solid var(--line);border-radius:12px;outline:none
+}
+input:focus,select:focus{border-color:#5179b2}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.btn{
+  border:0;border-radius:12px;padding:12px 15px;cursor:pointer;font-weight:700
+}
+.primary{background:linear-gradient(135deg,var(--accent),#5c8eff);color:#07111f}
+.secondary{background:#1b2940;color:var(--text);border:1px solid var(--line)}
+.output{margin-top:14px;border:1px solid var(--line);border-radius:16px;background:#0b1220;overflow:hidden}
+.output-head{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-bottom:1px solid var(--line)}
+.output-head b{font-size:13px}.output-head span{font-size:11px;color:var(--muted)}
+pre{margin:0;padding:16px;white-space:pre-wrap;word-break:break-word;color:#d7e5ff;font-size:13px;line-height:1.55}
+.steps{display:grid;gap:10px}
+.step{display:flex;gap:12px;padding:13px;border:1px solid var(--line);border-radius:14px;background:#0e1728}
+.num{min-width:28px;height:28px;border-radius:9px;display:grid;place-items:center;background:#203457;color:#acd0ff;font-weight:800}
+.step strong{font-size:13px}.step div:last-child{color:var(--muted);font-size:12px;line-height:1.45}
+.note{margin-top:15px;padding:12px 13px;border:1px solid #3a4154;background:#12182a;border-radius:13px;color:#bac6d9;font-size:12px;line-height:1.5}
+.notice{margin-top:18px;padding:14px;border:1px solid #3a4154;border-radius:16px;background:rgba(18,24,42,.8);color:#c4cee0;font-size:12px;line-height:1.5}
+.footer{text-align:center;color:#70809b;font-size:11px;padding:25px 0 10px}
+@media(max-width:850px){.grid{grid-template-columns:1fr}.hero h2{font-size:28px}}
+@media(max-width:600px){.formgrid,.quick{grid-template-columns:1fr}.container{padding:14px}.hero{padding:20px}}
+</style>
+</head>
+<body>
+<div class="container">
+<header>
+  <div class="brand">
+    <div class="logo">M</div>
+    <div><h1>MoveMate</h1><div class="sub">Windows uchun fayl ko‘chirish yordamchisi</div></div>
+  </div>
+  <div class="badge">C: ↔ D: · Downloads · Pictures · Desktop</div>
+</header>
+
+<section class="hero">
+  <h2>Faylni qayerdan qayerga ko‘chirasiz?</h2>
+  <p>Manzilni tanlang — sayt sizga eng qulay usulni, tayyor Windows buyruğini va bosqichlarini chiqaradi.</p>
+</section>
+
+<div class="grid">
+  <section class="card">
+    <h3>1. Tez tanlov</h3>
+    <div class="quick">
+      <button onclick="preset('D:\\','C:\\')">D disk → C disk<small>Katta papka yoki fayl uchun</small></button>
+      <button onclick="preset('C:\\Users\\%USERNAME%\\Downloads','C:\\Users\\%USERNAME%\\Pictures')">Downloads → Pictures<small>Yuklangan rasmlarni tartiblash</small></button>
+      <button onclick="preset('C:\\Users\\%USERNAME%\\Desktop','D:\\')">Desktop → D disk<small>Desktopni bo‘shatish</small></button>
+      <button onclick="preset('C:\\Users\\%USERNAME%\\Downloads','D:\\Downloads')">Downloads → D:\\Downloads<small>C diskdagi joyni tejash</small></button>
+    </div>
+
+    <h3 style="margin-top:22px">2. O‘zingiz yozing</h3>
+    <div class="formgrid">
+      <div><label>Manba</label><input id="src" value="D:\" placeholder="Masalan: D:\Games"></div>
+      <div><label>Maqsad</label><input id="dst" value="C:\Users\%USERNAME%\Desktop" placeholder="Masalan: C:\Backup"></div>
+    </div>
+    <div class="row" style="margin-top:13px">
+      <button class="btn primary" onclick="generate()">Usulni ko‘rsatish</button>
+      <button class="btn secondary" onclick="swapPaths()">↕ Manzilni almashtirish</button>
+    </div>
+  </section>
+
+  <section class="card">
+    <h3>3. Eng qulay usul</h3>
+    <div class="steps" id="steps"></div>
+    <div class="note" id="methodNote"></div>
+  </section>
+</div>
+
+<section class="card" style="margin-top:18px">
+  <h3>Tayyor buyruq</h3>
+  <div class="output">
+    <div class="output-head"><b>CMD / Windows Terminal</b><span>Copy tugmasini bosing</span></div>
+    <pre id="command">robocopy "D:\" "C:\Users\%USERNAME%\Desktop" /E /MOVE</pre>
+  </div>
+  <div class="row" style="margin-top:12px">
+    <button class="btn secondary" onclick="copyCmd()">📋 Buyruqni nusxalash</button>
+    <button class="btn secondary" onclick="showExplorer()">📁 Explorer usulini ko‘rsatish</button>
+  </div>
+  <div class="notice" id="explorerTip">
+    Explorer usuli: manba papkasini oching → kerakli fayl/papkani belgilang → <b>Ctrl+X</b> → maqsad papkasiga kiring → <b>Ctrl+V</b>. Bitta yoki bir nechta fayl uchun eng oson usul shu.
+  </div>
+</section>
+
+<section class="card" style="margin-top:18px">
+  <h3>Qaysi holatda qaysi usul?</h3>
+  <div class="quick">
+    <button onclick="setExplanation('Bir nechta fayl/papka','Ctrl+X → Ctrl+V','Windows Explorer’da eng tezkor.')">📦 Bir nechta fayl<small>Explorer tavsiya qilinadi</small></button>
+    <button onclick="setExplanation('Juda katta papka','robocopy','Katta hajmli ko‘chirishda barqaror usul.')">💾 Juda katta papka<small>CMD / robocopy</small></button>
+    <button onclick="setExplanation('Downloads → Pictures','Explorer','Rasmlarni tanlab ko‘chirish qulay.')">🖼️ Rasmlar<small>Explorer qulay</small></button>
+    <button onclick="setExplanation('C: → D:','robocopy yoki Explorer','Fayl hajmi va soniga qarab tanlang.')">🗂️ C va D o‘rtasida<small>Ikkalasi ham ishlaydi</small></button>
+  </div>
+  <div class="notice" id="explainBox" style="display:none"></div>
+</section>
+
+<div class="footer">MoveMate · Sayt ko‘rsatma va buyruqlarni tayyorlaydi. Fayllarni brauzerning o‘zi avtomatik ko‘chirmaydi.</div>
+</div>
+
+<script>
+function normalize(p){ return p.trim().replace(/^"|"$/g,''); }
+function escapePath(p){ return '"' + p.replace(/"/g,'\\"') + '"'; }
+function preset(s,d){ document.getElementById('src').value=s; document.getElementById('dst').value=d; generate(); }
+function swapPaths(){ let a=document.getElementById('src'),b=document.getElementById('dst'); [a.value,b.value]=[b.value,a.value]; generate(); }
+
+function generate(){
+  const src=normalize(document.getElementById('src').value);
+  const dst=normalize(document.getElementById('dst').value);
+  if(!src || !dst){return}
+  const hasFolderHint = !src.split('\\').pop().includes('.');
+  const cmd=`robocopy ${escapePath(src)} ${escapePath(dst)} /E /MOVE`;
+  document.getElementById('command').textContent=cmd;
+
+  let special='';
+  const lowS=src.toLowerCase(), lowD=dst.toLowerCase();
+  if(lowS.includes('downloads') && lowD.includes('pictures')) special='Bu holatda rasmlarni Explorer’da tanlab Ctrl+X → Ctrl+V qilish odatda eng sodda.';
+  else if(src.match(/^D:\\?$/i) && dst.match(/^C:\\?$/i)) special='Butun D: diskni C: ga ko‘chirish xavfli. Kerakli papka yoki faylni alohida tanlang.';
+  else if(src.match(/^C:\\?$/i) && dst.match(/^D:\\?$/i)) special='Butun C: diskni ko‘chirish tavsiya etilmaydi. Faqat kerakli papkalarni ko‘chiring.';
+  else special='Kichik hajm uchun Explorer, katta hajm yoki ko‘p fayl uchun robocopy qulay.';
+
+  const steps=[
+    ['1','Manba papkani aniqlang',src],
+    ['2','Maqsad papkani aniqlang',dst],
+    ['3','Buyruqni Terminal/CMD’da ishga tushiring','Windows Terminal → buyruqni joylashtiring → Enter'],
+    ['4','Natijani tekshiring','Maqsad papkasida fayllar paydo bo‘lganini tekshiring']
+  ];
+  document.getElementById('steps').innerHTML=steps.map(x=>`<div class="step"><span class="num">${x[0]}</span><div><strong>${x[1]}</strong><br>${x[2]}</div></div>`).join('');
+  document.getElementById('methodNote').textContent=special;
+}
+function copyCmd(){
+  navigator.clipboard.writeText(document.getElementById('command').textContent).then(()=>{
+    const b=event.currentTarget, old=b.textContent; b.textContent='✅ Nusxalandi'; setTimeout(()=>b.textContent=old,1200);
+  });
+}
+function showExplorer(){
+  document.getElementById('explorerTip').innerHTML='<b>Explorer:</b> manba papkasini oching → fayl/papkani belgilang → <b>Ctrl+X</b> → maqsad papkasini oching → <b>Ctrl+V</b>. Bir nechta elementni birga ko‘chirishda <b>Shift</b> yoki <b>Ctrl</b> bilan tanlash mumkin.';
+}
+function setExplanation(title,method,text){
+  const box=document.getElementById('explainBox');
+  box.style.display='block';
+  box.innerHTML=`<b>${title}</b> → ${method}<br><span style="opacity:.85">${text}</span>`;
+}
+generate();
+</script>
+</body>
+</html>
